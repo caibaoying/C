@@ -1,94 +1,169 @@
 #include <iostream>
-#include <math.h>
 #include <assert.h>
-#include "timer.h"
+#include <queue>
 #include <Windows.h>
-//
+#include "输入输出问题.h"
 using namespace std;
-//
-//int* input(const int& n,const  int& m)
-//{
-//	int priceNum[n];
-//	char* dietNum[m];
-//	for (int i = 0; i < n; ++i)
-//	{
-//		cout << priceNum[i] << " ";
-//	}
-//	cout << endl;
-//	for (int j = 0; j < m; ++j)
-//	{
-//		cout << *dietNum + j << endl;
-//	}
-//
-//	return priceNum;
-//}
-//
-//void output(int* tmp, int n, int m)
-//{
-//	assert(tmp);
-//	sort(tmp,n);
-//	if (n < m)    // 确保有所有物品
-//	{
-//		return;
-//	}
-//
-//	int MaxCost = 0;
-//	int MinCost = 0;
-//
-//	for (int i = 0; i < n; ++i)
-//	{
-//		if (i < m)
-//		{
-//			MinCost += i;
-//		}
-//
-//		if (i >= n - m)
-//		{
-//			MaxCost += i;
-//		}
-//	}
-//
-//	cout << MinCost << MaxCost << endl;
-//}
-//
-//int main()
-//{
-//	int n = 0, m = 0;   //n价签数， m 为物品单数
-//	scanf("%d%d\n", &n, &m);
-//	int* tmp = input(n, m);
-//	output(tmp, n, m);
-//	return 0;
-//}
 
-//#include <iostream>
-//using namespace std;
-//
-//int main()
+//struct BinaryTreeNode
 //{
-//	int n = 0;
-//	int Circle[n];
-//	cin >> n;
-//	cout << endl;
-//	for (int i = 0; i < n; ++i)
+//	int _data;
+//	BinaryTreeNode* _left;
+//	BinaryTreeNode* _right;
+//
+//	BinaryTreeNode(int data)
 //	{
-//		cin >> Circle[i] << " ";
+//		_data = data;
 //	}
-//	cout < endl;
+//};
 //
-//	int array[n];  // 并查集解决该问题
-//	
+////构造一棵二叉树
+//class BinaryTree
+//{
+//public:
+//	BinaryTree()
+//	:_root(NULL)
+//	{}
+//	BinaryTree(const char* a, int size)
+//	{
+//		int index = 0;
+//		_root = _Create(a, size, index);
+//	}
 //
+//	//求二叉树的宽度】宽度就是二叉树每层节点个数的最大值，只看一层，不用相加；
+//	int width()
+//	{
+//		BinaryTreeNode* cur = _root;
+//		if (NULL == _root)
+//		{
+//			return -1;
+//		}
+//		queue<BinaryTreeNode*> _queue;
+//		_queue.push(cur);
+//		int nLastLevelWidth = 1;
+//		int nCurLevelWidth = 0;
+//		int nWidth = 0;
 //
-//	return 0;
+//		int ntmpLastLevel = 0;
+//		while (!_queue.empty())
+//		{
+//			ntmpLastLevel = nLastLevelWidth;
+//			while (ntmpLastLevel != 0)
+//			{
+//				BinaryTreeNode* tmp = _queue.front();
+//				_queue.pop();
+//				if (tmp->_left)
+//					_queue.push(tmp->_left);
+//				if (tmp->_right)
+//					_queue.push(tmp->_right);
+//				--ntmpLastLevel;
+//			}
+//
+//			nCurLevelWidth = _queue.size();
+//			nWidth = nLastLevelWidth < nCurLevelWidth ? nCurLevelWidth : nLastLevelWidth;
+//			nLastLevelWidth = nCurLevelWidth;
+//		}
+//		return nWidth;
+//	}
+//
+//	~BinaryTree()
+//	{}
+//protected:
+//	BinaryTreeNode* _Create(const char* a, int size,int index)
+//	{
+//		assert(a);
+//		BinaryTreeNode* root = NULL;
+//		if (index < size && a[index] != '#')
+//		{
+//			root = new BinaryTreeNode(a[index]);
+//			root->_left = _Create(a, size, ++index);
+//			root->_right = _Create(a, size, ++index);
+//		}
+//		return root;
+//	}
+//private:
+//	BinaryTreeNode* _root;
+//};
+//
+//void test()
+//{
+//	char arr[] = { '1', '2', '#', '#', '3', '4', '#', '#', '5', '6' };
+//	BinaryTree bt(arr, 10);
+//	cout<<bt.width()<<endl;
 //}
+//
+//class A
+//{
+//public:
+//	void fun()const  // const 调用const，非const调用非const
+//	{
+//		printf("A123\n");
+//	}
+//
+//	virtual void fun()
+//	{
+//		printf("A456\n");
+//	}
+//	virtual ~A()
+//	{
+//		printf("~A");
+//	}
+//};
+//
+//class B :public A
+//{
+//public:
+//	void fun()
+//	{
+//		printf("B");
+//	}
+//	virtual ~B()
+//	{
+//		printf("~B");
+//	}
+//};
+class A
+{
+public:
+	void test()
+	{
+		static int i;
+		printf("abc\n");
+	}
+
+	static void fun();
+
+	void fun2()
+	{
+		fun();
+	}
+};
+void A::fun()
+{
+	//test();
+}
 
 int main()
 {
-	//Test1();
-	int p[2][3] = { { 1, 2, 5 }, { 3, 4, 6 } };
-	cout << sizeof(p)<<sizeof(*p)<<sizeof(**p) << endl;
-	cout << *(*p+1) << endl;
-	cout << *p + 1 << endl;
+	//const int i = 0;
+	//static int b;
+	A::fun();
+	//fun2();
+	/*A* p = new B();
+	A a;
+	B b;
+	cout << sizeof(a) << endl; 
+	cout << sizeof(b) << endl;
+	cout << sizeof(p) << endl;*/
+	/*p->fun();
+	p->~A();
+	const int a = 0;
+	int b = a;
+	cout << b;
+	A a;
+	a.fun();
+	//test();
+	input();*/
 	system("pause");
 	return 0;
 }
