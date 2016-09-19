@@ -1,93 +1,152 @@
-//#include <iostream>
-//#include <Windows.h>
-//
-//using namespace std;
-//
-//int main()
-//{
-//	/*char array[100] = {0};
-//	scanf("%s", array);
-//	int buy = 0, sale = 0;
-//	int max = (array[2]-'0')-(array[0]-'0');
-//	for (int i = 4; array[i] != '\0'; ++i)
-//	{
-//		buy = array[i] - '0';
-//		if (array[i + 2])
-//		{
-//			sale = array[i + 2] - '0';
-//		}
-//		else
-//		{
-//			break;
-//		}
-//		if (array[i] != ',')
-//		{
-//			int tmp = sale - buy;
-//			max = (max < tmp ? tmp : max);
-//		}
-//	}
-//	printf("%d\n", max);
-//	system("pause");
-//	return 0;*/
-//}
-
 #include <iostream>
-#include <stdio.h>
 #include <Windows.h>
-#include <algorithm>
-#include <vector>
+#include <stack>
 using namespace std;
 
-int find(int num, int * array, int begin, int end,bool flag)
+struct info
 {
-	if (NULL == array)
+	int _row;
+	int _col;
+	int _value;
+	info(int row, int col, int value)
+		:_row(row)
+		, _col(col)
+		, _value(value)
+	{}
+};
+
+stack<info> s;
+
+void push(int array[][5], int row, int col)
+{
+	int up = -1;
+	int down = -1;
+	int left = -1;
+	int right = -1;
+	int cur = array[row][col];
+
+
+	if (array[row][col - 1])
 	{
-		printf("(-1)--1\n");
-		return -1;
+		up = array[row][col - 1];
+		info node(row, col - 1, up);
+		s.push(node);
 	}
-	if (begin == end)
+
+	if (array[row][col + 1])
 	{
-		if (flag)
-			printf("(-1)-%d\n", begin-1);
-		else
-			printf("(-1)-%d\n", end + 1);
-		return -1;
+		down = array[row][col + 1];
+		info node(row, col + 1, down);
+		s.push(node);
 	}
-	int left = array[begin];
-	int right = array[end];
-	int mid = end- (end - begin) / 2;
-	if (num == array[mid])
+
+	if (array[row - 1][col])
 	{
-		printf("%d\n", mid);
-		return 1;
+		left = array[row - 1][col];
+		info node(row - 1, col, left);
+		s.push(node);
 	}
-	if (num > array[mid])
+
+	if (array[row + 1][col])
 	{
-		find(num, array, mid+1, end, true);
+		right = array[row + 1][col];
+		info node(row + 1, col, right);
+		s.push(node);
 	}
-	if (num < array[mid])
+}
+
+void set(int array[][5], int row, int col)
+{
+	while (!s.empty())
 	{
-		find(num, array, begin, mid-1, false);
+		info top = s.top();
+		s.pop();
+		if (top._value == 1 && top._col != col && top._row != row)
+		{
+			array[top._row][top._col] = 0;
+			push(array, top._row, top._col);
+		}
 	}
 }
 
 int main()
 {
-	int findNum;
-	int arrayNum;
-	scanf("%d", &findNum);
-	scanf("%d", &arrayNum);
+	int flag = 0;
 
-	int* myVec = new int[arrayNum];
-	int n;
-	for (int i = 0; i < arrayNum; ++i)
+	int array[][5] = { 
+	{ 1, 1, 0, 0, 1 }, 
+	{ 0, 1, 0, 1, 0 },
+	{ 0, 0, 0, 1, 1 },
+	{ 1, 0, 0, 0, 1 },
+	{ 1, 1, 0, 0, 1 } };
+
+	for (int row = 0; row < 5; ++row)
 	{
-		scanf("%d", &n);
-		myVec[i] = n;
-	}
-	//sort(myVec, myVec+arrayNum-1);
+		for (int col = 0; col < 5; ++col)
+		{
+			//push(array, row, col);
+			int up = -1;
+			int down = -1;
+			int left = -1;
+			int right = -1;
+			int cur = array[row][col];
 
-	find(findNum, myVec, 0, arrayNum-1, true);
+			if (array[row -1][col] && row >= 1)
+			{
+				up = array[row-1][col];
+				info node(row-1, col, up);
+				s.push(node);
+			}
+
+			if (array[row+1][col])
+			{
+				down = array[row+1][col];
+				info node(row+1, col, down);
+				s.push(node);
+			}
+
+			if (array[row][col-1] && col >= 1)
+			{
+				left = array[row][col-1];
+				info node(row, col-1, left);
+				s.push(node);
+			}
+
+			if (array[row][col+1])
+			{
+				right = array[row][col+1];
+				info node(row, col+1, right);
+				s.push(node);
+			}
+
+			//set(array, row, col);
+			while (!s.empty())
+			{
+				info top = s.top();
+				s.pop();
+				if (top._value == 1 && (top._col != col || top._row != row))
+				{
+					array[top._row][top._col] = 0;
+					push(array, top._row, top._col);
+				}
+			}
+
+			for (int col2 = 0; col2 < 5; ++col2)
+			{
+				if (array[row][col2] == 1)
+				{
+					++flag;
+				}
+			}
+		}
+	}
+
+	for (int row = 0; row < 5; ++row)
+	{
+		
+	}
+	printf("%d\n", flag);
 	system("pause");
 	return 0;
 }
+
